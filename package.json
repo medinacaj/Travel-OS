@@ -1,0 +1,16 @@
+{
+  "name": "ruta-ba-travel-os",
+  "version": "3.9.1",
+  "private": true,
+  "description": "Travel OS: planificador administrativo de viajes (SPA estática, GitHub Pages / Vercel).",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node scripts/build.mjs && npx --yes serve dist -l 3000",
+    "preview": "node scripts/standalone.mjs",
+    "test": "node scripts/build.mjs && python3 tests/e2e.py && python3 tests/e2e_cloud.py"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

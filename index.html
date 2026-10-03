@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="es" data-theme="ui">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Travel OS — Planificador de viajes: itinerario, mapa y gastos</title>
+  <meta name="description" content="Planifica tu viaje por días: itinerario por mañana, tarde y noche, mapa con rutas, ofertas de viaje verificadas en Chile, reservas y gastos compartidos.">
+  <meta name="robots" content="__ROBOTS__">
+  <link rel="canonical" href="__SITE_URL__/">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="color-scheme" content="light dark">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Travel OS">
+  <meta property="og:locale" content="es_CL">
+  <meta property="og:title" content="Travel OS — Planificador de viajes con itinerario, mapa y gastos">
+  <meta property="og:description" content="Itinerario por días, mapa con la ruta, ofertas de viaje verificadas en Chile con puntaje 0–100, reservas y gastos compartidos.">
+  <meta property="og:url" content="__SITE_URL__/">
+  <meta property="og:image" content="__SITE_URL__/assets/img/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Travel OS: planificador de viajes con itinerario y mapa">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Travel OS — Planificador de viajes con itinerario, mapa y gastos">
+  <meta name="twitter:description" content="Itinerario por días, mapa con la ruta, reservas, documentos y gastos compartidos.">
+  <meta name="twitter:image" content="__SITE_URL__/assets/img/og-image.png">
+
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="assets/css/app.css?v=__ASSET_V__">
+
+  <script>
+    // Aplica el tema guardado antes de pintar (evita parpadeo).
+    (function () {
+      try {
+        var t = JSON.parse(localStorage.getItem("ba_trip_theme"));
+        if (["ui", "ui-noche", "claro", "noche", "arena", "factory", "seline", "steep"].indexOf(t) < 0) {
+          // Tema por defecto: UI claro. El modo oscuro se elige con el botón luna/sol.
+          t = "ui";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Travel OS",
+    "url": "__SITE_URL__/",
+    "description": "Planificador de viajes con itinerario por días, mapa con rutas, ofertas de viaje en Chile con puntaje, reservas, documentos, presupuesto y gastos compartidos.",
+    "applicationCategory": "TravelApplication",
+    "operatingSystem": "Web",
+    "inLanguage": "es",
+    "isAccessibleForFree": true,
+    "image": "__SITE_URL__/assets/img/og-image.png"
+  }
+  </script>
+
+  <script type="module" src="assets/js/main.js?v=__ASSET_V__"></script>
+  <script>
+    // Si la app no arranca (p. ej. index.html abierto como archivo: los navegadores bloquean los
+    // módulos JS en file://), se explica cómo abrirla en vez de mostrar una página rota.
+    setTimeout(function () {
+      if (document.body && document.body.classList.contains("is-ready")) return;
+      var n = document.getElementById("bootNotice");
+      if (n) n.hidden = false;
+    }, location.protocol === "file:" ? 300 : 6000);
+  </script>
+</head>
+<body>
+  <div id="bootNotice" class="boot-notice" role="alert" hidden>
+    <strong>La app no pudo iniciar.</strong>
+    Si abriste <code>index.html</code> directamente desde la carpeta, el navegador bloquea sus módulos por seguridad.
+    Abre <code>ruta-ba-vista-previa.html</code> (funciona con doble clic), publícala en GitHub Pages
+    o sírvela con <code>npm start</code>.
+  </div>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <div class="app">
+    <aside class="sidebar" aria-label="Navegación principal">
+      <a class="brand" href="./" data-home aria-label="Travel OS, inicio">
+        <span class="brand-mark" aria-hidden="true"><svg class="logo-svg" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true" focusable="false"><defs><linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><rect width="40" height="40" rx="12" fill="url(#logoGrad)"/><g transform="translate(8 8)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" /></g><circle cx="31" cy="9" r="3" fill="#fbbf24"/></svg></span>
+        <span class="brand-text"><strong>Travel <span class="brand-os">OS</span></strong><small>Control de viajes</small></span>
+      </a>
+      <nav class="nav" aria-label="Secciones">
+        <a href="#/inicio" data-route="inicio" data-tone="summary"><span class="nav-icon" aria-hidden="true"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg></span><span class="nav-label">Inicio</span></a>
+        <a href="#/viajes" data-route="viajes" data-tone="places"><span class="nav-icon" aria-hidden="true"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" /></svg></span><span class="nav-label">Viajes</span></a>
+        <div class="nav-group" role="group" aria-labelledby="navTripLabel">
+          <p class="nav-group-title" id="navTripLabel">Viaje: <span id="navTripName">—</span></p>
+          <label class="visually-hidden" for="tripSwitch">Cambiar de viaje</label>
+          <select class="input input-sm trip-switch" id="tripSwitch"></select>
+          <a href="#/viaje/itinerario" data-route="viaje/itinerario" data-tone="plan"><span class="nav-icon" aria-hidden="true"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11 5h10" /><path d="M11 12h10" /><path d="M11 19h10" /><path d="M4 4h1v5" /><path d="M4 9h2" /><path d="M6.5 20H3.4c0-1 2.6-1.925 2.6-3.5a1.5 1.5 0 0 0-2.6-1.02" /></svg></span><span class="nav-label">Itinerario</span></a>
+          <a href="#/viaje/mapa" data-route="viaje/mapa" data-tone="map"><span class="nav-icon" aria-hidden="true"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z" /><path d="M15 5.764v15" /><path d="M9 3.236v15" /></svg></span><span class="nav-label">Mapa</span></a>
+          <a href="#/viaje/lugares" data-route="viaje/lugares" data-tone="places"><span class="nav-icon" aria-hidden="true"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /><circle cx="12" cy="10" r="3" /></svg></span><span class="nav-label">Lugares e ideas</span></a>
+          <a href="#/viaje/reservas" data-route="viaje/reservas" data-tone="reservations" data-private><span class="nav-icon" aria-hidden="true"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 2v3" /><path d="M16 2v3" /><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18" /><path d="m9 15 2 2 4-4" /></svg></span><span class="nav-label">Reservas</span></a>
+          <a href="#/viaje/documentos" data-route="viaje/documentos" data-tone="docs" data-private><span class="nav-icon" aria-hidden="true"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /><path d="M14 2v5a1 1 0 0 0 1 1h5" /><path d="M10 9H8" /><path d="M16 13H8" /><path d="M16 17H8" /></svg></span><span class="nav-label">Documentos</span></a>
+          <a href="#/viaje/presupuesto" data-route="viaje/presupuesto" data-tone="budget" data-private><span class="nav-icon" aria-hidden="true"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></svg></span><span class="nav-label">Presupuesto</span></a>
+          <a href="#/viaje/pendientes" data-route="viaje/pendientes" data-tone="pending" data-private><span class="nav-icon" aria-hidden="true"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="m16 9-5.5 5.5L8 12" /></svg></span><span class="nav-label">Pendientes</span></a>
+          <a href="#/viaje/compartir" data-route="viaje/compartir" data-tone="ideas" data-private><span class="nav-icon" aria-hidden="true"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /><line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></svg></span><span class="nav-label">Compartir</span></a>
+        </div>
+        <a href="#/ofertas" data-route="ofertas" data-tone="deals"><span class="nav-icon" aria-hidden="true"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" /><circle cx="7.5" cy="7.5" r=".5" fill="currentColor" /></svg></span><span class="nav-label">Ofertas</span></a>
+        <a href="#/ajustes" data-route="ajustes" data-tone="docs" data-private><span class="nav-icon" aria-hidden="true"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /><circle cx="12" cy="12" r="3" /></svg></span><span class="nav-label">Ajustes</span></a>
+      </nav>
+      <p class="sidebar-note" id="sidebarNote" data-private>Tus datos se guardan en este navegador. En <strong>Compartir</strong> obtienes un enlace de solo lectura para cada viaje.</p>
+    </aside>
+
+    <main id="main" class="main">
+      <div class="share-banner" id="shareBanner" role="status" hidden>
+        <span>Vista compartida · solo lectura · no requiere registro</span>
+        <a href="./" data-home>Abrir mi propio planificador</a>
+      </div>
+
+      <header class="topbar">
+        <a class="topbar-logo" href="./" data-home aria-label="Travel OS, inicio"><svg class="logo-svg" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true" focusable="false"><defs><linearGradient id="logoGradM" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><rect width="40" height="40" rx="12" fill="url(#logoGradM)"/><g transform="translate(8 8)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" /></g><circle cx="31" cy="9" r="3" fill="#fbbf24"/></svg></a>
+        <div class="topbar-title"><p class="page-title" id="pageTitle">Inicio</p><p class="page-sub" id="pageSub"></p></div>
+        <div class="top-search" role="search">
+          <label class="visually-hidden" for="globalSearch">Buscar lugares y viajes</label>
+          <span class="top-search-ico" aria-hidden="true"><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg></span>
+          <input class="input" id="globalSearch" type="search" placeholder="Buscar lugares o viajes…" autocomplete="off" aria-controls="searchResults" aria-expanded="false">
+          <div class="search-results" id="searchResults" role="listbox" aria-label="Resultados de búsqueda" hidden></div>
+        </div>
+        <button type="button" class="top-bell top-mode" id="modeToggle" data-act="mode-toggle" aria-label="Cambiar a modo oscuro" title="Modo claro / oscuro"></button>
+        <a class="top-bell" id="topBell" href="#/ofertas" aria-label="Alertas de ofertas"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10.268 21a2 2 0 0 0 3.464 0" /><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" /></svg><span class="bell-dot" id="bellDot" hidden></span></a>
+        <div class="top-user" id="topUser"></div>
+      </header>
+      <div class="cloud-bar" id="cloudBar" role="status" aria-live="polite" hidden></div>
+
+      <div id="tripChrome" data-routes="viaje/* compartido">
+      <header class="trip-header">
+        <div class="ticket">
+          <div class="ticket-main">
+            <p class="trip-kicker" id="tripKicker">Viaje activo · Argentina</p>
+            <h1 class="trip-title" id="tripTitle">Buenos Aires</h1>
+            <p class="trip-meta">
+              <span id="tripDaysCount">5 días</span><span aria-hidden="true">·</span>
+              <span id="tripPlacesCount">26 lugares</span><span aria-hidden="true">·</span>
+              <span id="tripStyle">Estilo mixto</span>
+              <span class="demo-badge" id="demoBadge" title="Viaje de ejemplo: reemplázalo con ✦ Nuevo viaje">Datos de ejemplo</span>
+            </p>
+            <p class="trip-dates" id="tripDates"></p>
+          </div>
+          <div class="ticket-stub admin">
+            <button type="button" class="btn btn-primary" data-act="add-place" data-fk="hdr-add">+ Lugar</button>
+            <button type="button" class="btn" data-act="sort-day" data-fk="hdr-sort">↕ Ordenar día</button>
+            <button type="button" class="btn" data-act="trip-edit" data-fk="hdr-edit">✎ Datos del viaje</button>
+          </div>
+        </div>
+      </header>
+
+      <nav class="tabs trip-tabs" id="tripTabs" aria-label="Secciones del viaje"></nav>
+      </div>
+      <div class="history-bar admin" data-routes="viaje/* ofertas" role="toolbar" aria-label="Gestión de cambios">
+        <span class="history-title">Gestión</span>
+        <button type="button" class="icon-btn" id="undoBtn" data-act="undo" disabled aria-label="Deshacer">↶</button>
+        <button type="button" class="icon-btn" id="redoBtn" data-act="redo" disabled aria-label="Rehacer">↷</button>
+        <span class="history-label" id="historyLabel" aria-live="polite">Sin cambios en esta sesión</span>
+      </div>
+
+      <div class="sections">
+
+        <section id="sec-inicio" class="section" data-section="inicio" data-routes="inicio" data-tone="summary" aria-labelledby="h-inicio">
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-inicio">Ofertas y alertas</h2><p class="section-sub" id="sub-inicio"></p></div>
+          </header>
+          <div class="section-body" id="inicioBody"></div>
+        </section>
+
+
+        <section id="sec-viajes" class="section" data-section="viajes" data-routes="viajes" data-tone="places" aria-labelledby="h-viajes">
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-viajes">Viajes</h2><p class="section-sub" id="sub-viajes"></p></div>
+            <div class="section-tools admin"><button type="button" class="btn btn-sm btn-primary" data-act="planner">✦ Nuevo viaje</button></div>
+          </header>
+          <div class="section-body" id="viajesBody"></div>
+        </section>
+
+        <section id="sec-lugares" class="section" data-section="lugares" data-routes="viaje/lugares" data-tone="places" aria-labelledby="h-lugares">
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-lugares">Todos los lugares</h2><p class="section-sub" id="sub-lugares"></p></div>
+          </header>
+          <div class="section-body" id="lugaresBody"></div>
+        </section>
+
+        <section id="sec-compartir" class="section" data-section="compartir" data-routes="viaje/compartir" data-tone="ideas" aria-labelledby="h-compartir" data-private>
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-compartir">Compartir este viaje</h2><p class="section-sub" id="sub-compartir"></p></div>
+          </header>
+          <div class="section-body" id="compartirBody"></div>
+        </section>
+
+        <section id="sec-ajustes" class="section" data-section="ajustes" data-routes="ajustes" data-tone="docs" aria-labelledby="h-ajustes" data-private>
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-ajustes">Ajustes</h2><p class="section-sub">Cuenta, apariencia y respaldo</p></div>
+          </header>
+          <div class="section-body" id="ajustesBody"></div>
+        </section>
+
+        <section id="sec-menu" class="section" data-section="menu" data-routes="menu" data-tone="summary" aria-labelledby="h-menu">
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-menu">Menú</h2></div>
+          </header>
+          <div class="section-body"><nav class="menu-nav" id="menuNav" aria-label="Todas las secciones"></nav></div>
+        </section>
+
+        <section id="sec-resumen" class="section" data-routes="inicio" data-section="resumen" data-tone="summary" aria-labelledby="h-resumen" data-private>
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-resumen">Inicio · <span id="resumenTrip"></span></h2><p class="section-sub" id="sub-resumen"></p></div>
+            <div class="section-tools admin"><button type="button" class="btn btn-sm btn-primary" data-act="planner">✦ Nuevo viaje</button></div>
+          </header>
+          <div class="section-body" id="body-resumen">
+            <div id="tripNotice"></div>
+            <div class="stats" id="dashboard" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section id="sec-analytics" class="section section-plain" data-routes="inicio" data-section="analytics" aria-label="Indicadores del viaje">
+          <div class="dash-row">
+            <div class="widget widget-wide" id="wRhythm"></div>
+            <div class="widget" id="wCategories"></div>
+          </div>
+          <div class="widget" id="wProgress"></div>
+        </section>
+
+        <aside id="sec-side" class="section section-plain dash-side" data-routes="inicio" data-section="side" aria-label="Calendario y próximos viajes">
+          <div class="widget" id="wCalendar"></div>
+          <div class="widget" id="wUpcoming"></div>
+          <div class="widget" id="wReservations" data-private></div>
+        </aside>
+
+        <section id="sec-pendientes" class="section" data-routes="inicio viaje/pendientes" data-section="pendientes" data-tone="pending" aria-labelledby="h-pendientes" data-private>
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-pendientes">Acciones pendientes</h2><p class="section-sub" id="sub-pendientes"></p></div>
+            <div class="section-tools"><button type="button" class="btn btn-sm" data-act="pending-add">+ Agregar</button></div>
+          </header>
+          <div class="section-body" id="body-pendientes">
+            <div class="tabs" role="tablist" aria-label="Filtrar pendientes" id="pendingTabs"></div>
+            <div id="pendingList"></div>
+          </div>
+        </section>
+
+        <section id="sec-itinerario" class="section" data-routes="viaje/itinerario compartido" data-section="itinerario" data-tone="plan" aria-labelledby="h-itinerario" data-shared>
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-itinerario">Itinerario</h2><p class="section-sub" id="sub-itinerario"></p></div>
+          </header>
+          <div class="section-body" id="body-itinerario">
+            <div class="day-bar" id="dayBar">
+              <div class="tabs" role="tablist" aria-label="Días del viaje" id="dayTabs"></div>
+            </div>
+            <div id="todayStrip"></div>
+            <div id="itineraryBody" role="tabpanel" aria-labelledby="h-itinerario"></div>
+          </div>
+        </section>
+
+        <section id="sec-mapa" class="section" data-routes="viaje/mapa compartido" data-section="mapa" data-tone="map" aria-labelledby="h-mapa" data-shared>
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-mapa">Mapa</h2><p class="section-sub" id="sub-mapa"></p></div>
+          </header>
+          <div class="section-body" id="body-mapa">
+            <div class="map-toolbar">
+              <div class="tabs" role="tablist" aria-label="Día en el mapa" id="mapDayTabs"></div>
+              <div class="layer-switch" role="group" aria-label="Capa del mapa">
+                <button type="button" class="seg" data-act="map-layer" data-layer="streets" aria-pressed="true">Calles</button>
+                <button type="button" class="seg" data-act="map-layer" data-layer="terrain" aria-pressed="false">Terreno</button>
+                <button type="button" class="seg" data-act="map-layer" data-layer="satellite" aria-pressed="false">Satélite</button>
+              </div>
+              <button type="button" class="btn btn-sm btn-mymaps" data-act="mymaps" title="Descarga el viaje en KML para importarlo en Google My Maps"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z" /><path d="M15 5.764v15" /><path d="M9 3.236v15" /></svg><span>Crear en Google My Maps</span></button>
+            </div>
+            <div class="map-frame">
+              <div id="map" role="region" aria-label="Mapa interactivo con la ruta del día"></div>
+              <p class="map-status" id="mapStatus" role="status" hidden></p>
+            </div>
+          </div>
+        </section>
+
+        <section id="sec-ideas" class="section" data-routes="viaje/lugares" data-section="ideas" data-tone="ideas" aria-labelledby="h-ideas" data-private>
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-ideas">Bolsa de ideas</h2><p class="section-sub" id="sub-ideas"></p></div>
+          </header>
+          <div class="section-body" id="body-ideas">
+            <form class="inline-form" data-form="idea" novalidate>
+              <label class="field"><span>Nombre</span><input class="input" name="name" maxlength="120" placeholder="Ej.: Feria de Mataderos" required></label>
+              <label class="field"><span>Categoría</span>
+                <select class="input" name="category">
+                  <option>Comida</option><option>Transporte</option><option>Naturaleza</option><option selected>Cultura</option><option>Compras</option><option>Imperdible</option>
+                </select></label>
+              <label class="field"><span>Día objetivo</span><select class="input" name="targetDay" id="ideaDay"></select></label>
+              <label class="field field-wide"><span>Contexto</span><input class="input" name="context" maxlength="160" placeholder="Ej.: Solo domingos • Me lo recomendó Juan"></label>
+              <button type="submit" class="btn btn-primary">+ Guardar idea</button>
+              <p class="form-error" role="alert" hidden></p>
+            </form>
+            <p class="muted small">Con 3 votos, la idea pasa sola al itinerario.</p>
+            <div id="ideasList"></div>
+          </div>
+        </section>
+
+        <section id="sec-ofertas" class="section" data-routes="ofertas" data-section="ofertas" data-tone="deals" aria-labelledby="h-ofertas" data-private data-public>
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-ofertas">Ofertas de viaje</h2><p class="section-sub" id="sub-ofertas">Vuelos, estadías, paquetes y beneficios bancarios detectados en Chile</p></div>
+            <div class="section-tools admin"><button type="button" class="btn btn-sm" data-act="deal-add">+ Agregar oferta</button></div>
+          </header>
+          <div class="section-body" id="body-ofertas">
+            <div class="tabs" role="tablist" aria-label="Módulo de ofertas" id="dealsTabs"></div>
+
+            <div id="dp-ofertas" role="tabpanel" aria-label="Ofertas">
+              <div class="deal-kpis" id="dealKpis"></div>
+              <div class="deal-toolbar">
+                <div class="chips" id="dealChips" role="group" aria-label="Tipo de oferta"></div>
+                <div class="deal-filters">
+                  <label class="visually-hidden" for="dealSearch">Buscar ofertas</label>
+                  <input class="input" id="dealSearch" type="search" placeholder="Buscar ruta, aerolínea o banco" autocomplete="off">
+                  <label class="visually-hidden" for="dealStatus">Vigencia</label>
+                  <select class="input" id="dealStatus">
+                    <option value="live">Vigentes y próximas</option>
+                    <option value="all">Todas</option>
+                    <option value="expired">Vencidas (referencias)</option>
+                  </select>
+                  <label class="field-check deal-mine-check"><input type="checkbox" id="dealMine"><span>Solo para mi destino</span></label>
+                </div>
+              </div>
+              <div id="dealList"></div>
+              <p class="small muted deal-disclaimer">Precios en CLP verificados en la fecha indicada en cada oferta. Confirma el precio final antes de comprar: las tarifas promocionales tienen stock limitado.</p>
+            </div>
+            <div id="dp-informe" role="tabpanel" aria-label="Informe del día" hidden></div>
+            <div id="dp-alertas" role="tabpanel" aria-label="Alertas" hidden></div>
+            <div id="dp-noticias" role="tabpanel" aria-label="Noticias" hidden></div>
+            <div id="dp-herramientas" role="tabpanel" aria-label="Herramientas" hidden></div>
+            <div id="dp-datos" role="tabpanel" aria-label="Actualizar datos" hidden></div>
+          </div>
+        </section>
+
+        <section id="sec-reservas" class="section" data-routes="viaje/reservas" data-section="reservas" data-tone="reservations" aria-labelledby="h-reservas" data-private>
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-reservas">Reservas</h2><p class="section-sub" id="sub-reservas"></p></div>
+            <div class="section-tools"><button type="button" class="btn btn-sm" data-act="res-add">+ Agregar reserva</button></div>
+          </header>
+          <div class="section-body" id="body-reservas">
+            <div id="reservationsList"></div>
+          </div>
+        </section>
+
+        <section id="sec-gastos" class="section" data-routes="viaje/presupuesto" data-section="gastos" data-tone="budget" aria-labelledby="h-gastos" data-private>
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-gastos">Presupuesto y gastos</h2><p class="section-sub" id="sub-gastos"></p></div>
+          </header>
+          <div class="section-body" id="body-gastos">
+            <div class="split">
+              <div class="panel">
+                <h3 class="panel-title">Presupuesto</h3>
+                <div id="budgetSummary"></div>
+                <form class="inline-form inline-form-tight" data-form="budget" novalidate>
+                  <label class="field"><span>Monto</span><input class="input" name="amount" type="number" min="0" step="any" inputmode="decimal" placeholder="0" required></label>
+                  <label class="field"><span>Concepto</span><input class="input" name="concept" maxlength="80" placeholder="Ej.: Almuerzo"></label>
+                  <label class="field"><span>Moneda</span>
+                    <select class="input" name="currency" id="budgetCurrency">
+                      <option value="USD">USD</option><option value="ARS">ARS</option><option value="CLP">CLP</option><option value="EUR">EUR</option>
+                    </select></label>
+                  <div class="form-actions">
+                    <button type="submit" class="btn" name="type" value="add">+ Agregar al presupuesto</button>
+                    <button type="submit" class="btn btn-primary" name="type" value="expense">− Registrar gasto</button>
+                    <button type="button" class="btn btn-ghost" data-act="budget-reset">Reiniciar</button>
+                  </div>
+                  <p class="form-error" role="alert" hidden></p>
+                </form>
+                <div id="budgetMoves"></div>
+              </div>
+
+              <div class="panel">
+                <h3 class="panel-title">Gastos compartidos <span class="muted">· quién pagó qué</span></h3>
+                <div class="people">
+                  <div class="people-chips" id="peopleChips"></div>
+                  <form class="person-form" data-form="person" novalidate>
+                    <label class="visually-hidden" for="personName">Nombre del viajero</label>
+                    <input class="input" id="personName" name="name" maxlength="40" placeholder="Agregar viajero">
+                    <button type="submit" class="btn btn-sm">+ Agregar</button>
+                    <p class="form-error" role="alert" hidden></p>
+                  </form>
+                </div>
+                <form class="inline-form inline-form-tight" data-form="gx" novalidate>
+                  <label class="field"><span>Concepto</span><input class="input" name="concept" maxlength="80" placeholder="Ej.: Cena" ></label>
+                  <label class="field"><span>Monto</span><input class="input" name="amount" type="number" min="0" step="any" inputmode="decimal" placeholder="0" required></label>
+                  <label class="field"><span>Categoría</span>
+                    <select class="input" name="category">
+                      <option>Comida</option><option>Alojamiento</option><option>Transporte</option><option>Entradas</option><option>Compras</option><option>Otros</option>
+                    </select></label>
+                  <label class="field"><span>Quién pagó</span><select class="input" name="payer" id="gxPayer"></select></label>
+                  <fieldset class="field field-wide participants">
+                    <legend>Entre quiénes se divide</legend>
+                    <div id="gxParticipants" class="check-chips"></div>
+                  </fieldset>
+                  <div class="form-actions"><button type="submit" class="btn btn-primary">Registrar gasto compartido</button></div>
+                  <p class="form-error" role="alert" hidden></p>
+                </form>
+                <h4 class="mini-title">Saldos</h4>
+                <div id="debts" aria-live="polite"></div>
+                <h4 class="mini-title">Por categoría</h4>
+                <div id="expenseChart"></div>
+                <div id="gxList"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="sec-documentos" class="section" data-routes="viaje/documentos" data-section="documentos" data-tone="docs" aria-labelledby="h-documentos" data-private>
+          <header class="section-head">
+            <span class="tone-dot" aria-hidden="true"></span>
+            <div class="section-titles"><h2 id="h-documentos">Documentos</h2><p class="section-sub" id="sub-documentos"></p></div>
+            <div class="section-tools"><button type="button" class="btn btn-sm" data-act="doc-add">+ Agregar documento</button></div>
+          </header>
+          <div class="section-body" id="body-documentos">
+            <p class="muted small" id="docsStorageNote">Los archivos se guardan en IndexedDB y pertenecen solo a este navegador: no están en la nube ni se comparten.</p>
+            <div id="documentsList"></div>
+          </div>
+        </section>
+
+      </div>
+
+      <noscript>
+        <p class="noscript">Travel OS es una aplicación interactiva: activa JavaScript para planificar tu itinerario, ver el mapa y administrar reservas, documentos y gastos.</p>
+      </noscript>
+
+      <footer class="footer">
+        <p>Travel OS. Ofertas: datos de fuentes públicas con fecha de verificación; no somos agencia ni vendemos pasajes. Mapas © Esri, colaboradores de OpenStreetMap y OpenTopoMap. Clima: Open-Meteo.</p>
+      </footer>
+    </main>
+  </div>
+
+  <nav class="bottom-nav" id="bottomNav" aria-label="Secciones (móvil)"></nav>
+
+  <dialog id="modal" class="modal"></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
