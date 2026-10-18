@@ -12,3 +12,8 @@ El workflow `quality.yml` comprueba que el esquema SQL incluya RLS de tablas adm
 - Revisar la sesión de navegador y exposición a XSS antes de guardar contenido sensible.
 
 **Bloqueos no resueltos:** el único proyecto Supabase visible en la cuenta conectada está inactivo y no existe prueba independiente de que pertenezca a Travel-OS. No se ha modificado ninguna base de datos de producción.
+
+## Comprobación continua de interfaz P1 (18-10-2026)
+El workflow `quality.yml` ejecuta ahora las suites Playwright completas en Chromium: navegación, pantallas móviles (390 px), permisos y sincronización simulados mediante `tests/e2e.py` y `tests/e2e_cloud.py`. Todas las dependencias de mapas y clima de prueba son interceptadas/servicios ficticios; no se hacen pruebas sobre cuentas ni reservas reales.
+
+**Limitación:** pasar E2E con servidor Supabase simulado **no certifica** las políticas de seguridad de una base real, copias de respaldo, ni disponibilidad del despliegue. Esos controles requieren entorno autorizado y evidencia adicional.
