@@ -24,6 +24,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Comprobar restricciones RLS y privacidad antes de publicar
+        run: |
+          node tests/security_schema.mjs
+          node --test tests/security_schema_regressions.mjs
       - id: pages
         uses: actions/configure-pages@v5
       # SITE_URL: variable del repositorio (dominio propio) o, si no existe, la URL que entrega Pages
