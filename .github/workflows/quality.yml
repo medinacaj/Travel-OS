@@ -16,6 +16,8 @@ jobs:
           python-version: '3.12'
       - name: Comprobar permisos documentados
         run: node tests/security_schema.mjs
+      - name: Detectar regresiones de acceso público y documentos privados
+        run: node --test tests/security_schema_regressions.mjs
       - name: Construir aplicación
         run: npm run build
       - name: Preparar navegador de pruebas
