@@ -155,13 +155,20 @@ export function normalizeTrips(raw) {
   return days;
 }
 
+// Date.parse can normalize 2027-02-30 to March. Do not retain impossible trips.
+function validCalendarDate(value) {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const timestamp = Date.parse(value + "T12:00:00Z");
+  return Number.isFinite(timestamp) && new Date(timestamp).toISOString().slice(0, 10) === value;
+}
+
 export function normalizeMeta(raw) {
   const m = raw && typeof raw === "object" ? raw : {};
   return {
     destination: str(m.destination, 80) || "Mi viaje",
     country: str(m.country, 60),
     style: STYLES.includes(m.style) ? m.style : "Mixto",
-    startDate: /^\d{4}-\d{2}-\d{2}$/.test(m.startDate || "") && !Number.isNaN(Date.parse(m.startDate)) ? m.startDate : "",
+    startDate: validCalendarDate(m.startDate) ? m.startDate : "",
     isDemo: Boolean(m.isDemo)
   };
 }
