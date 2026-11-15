@@ -18,6 +18,8 @@ jobs:
         run: node tests/security_schema.mjs
       - name: Detectar regresiones de acceso público y documentos privados
         run: node --test tests/security_schema_regressions.mjs
+      - name: Validar números y fechas de itinerarios
+        run: node --test tests/trip-input-validation.test.mjs
       - name: Construir aplicación
         run: npm run build
       - name: Preparar navegador de pruebas
