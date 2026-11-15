@@ -32,8 +32,13 @@ export function str(value, max = 200) {
 }
 
 export function toNumber(value) {
-  if (value === "" || value === null || value === undefined) return NaN;
-  const n = typeof value === "number" ? value : Number(String(value).replace(",", "."));
+  // Empty/whitespace fields, arrays and non-decimal representations must not
+  // silently become zero (e.g. a missing latitude must not point to 0,0).
+  if (typeof value === "number") return Number.isFinite(value) ? value : NaN;
+  if (typeof value !== "string") return NaN;
+  const clean = value.trim().replace(",", ".");
+  if (!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(clean)) return NaN;
+  const n = Number(clean);
   return Number.isFinite(n) ? n : NaN;
 }
 
