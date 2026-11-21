@@ -273,3 +273,17 @@ Nota: es una aplicación de una sola URL indexable (`/`). Los datos del usuario 
 3. **Inspección de URLs** → URL principal → "Probar URL publicada" → revisar captura renderizada → **Solicitar indexación**.
 4. A los días, revisar **Páginas** (indexadas / no indexadas), **Mejoras** (datos estructurados) y que la canónica elegida por Google coincida con la declarada.
 5. Si cambia el dominio: actualizar `SITE_URL`, redirigir el anterior y reenviar el sitemap.
+
+## Continuidad y estado verificable · 21/11/2026
+
+**Propósito:** Planificador de viajes con itinerarios, mapas, reservas y presupuestos.
+
+**Límite:** Verificar integraciones reales y no asumir ofertas vigentes.
+
+- **Código:** consultar la rama principal efectiva, PR y commits recientes; mantener el alcance propio del producto.
+- **Validación:** revisar CI vinculada al SHA; esta edición documental no prueba funcionalidades.
+- **Entorno:** una demo, el código fusionado o un CI verde no demuestran producción. Verificar el sitio real cuando corresponda.
+- **Siguiente paso:** resolver el último bloqueo de los issues y registrar rama, PR, SHA, pruebas, entorno realmente verificado y pendientes.
+- **Privacidad:** no exponer secretos ni datos personales; conservar datos ficticios de prueba.
+
+**Fuente oficial:** decisiones y documentación de este repositorio.
